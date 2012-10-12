@@ -499,132 +499,132 @@ const WeatherMenuButton = new Lang.Class({
         this.load_json_async(this.get_weather_url(), function(json) {
 
             try {
-            let weather = json.get_object_member('query').get_object_member('results').get_object_member('channel');
-            let weather_c = weather.get_object_member('item').get_object_member('condition');
-            let forecast = weather.get_object_member('item').get_array_member('forecast').get_elements();
+                let weather = json.get_object_member('query').get_object_member('results').get_object_member('channel');
+                let weather_c = weather.get_object_member('item').get_object_member('condition');
+                let forecast = weather.get_object_member('item').get_array_member('forecast').get_elements();
 
-            /* TODO won't work with the new URL
-            // Fixes wrong woeid if necessary
-            try {
-                // Wrong woeid specified
-                if (weather.has_member('code') && weather.get_int_member('code') == 500) {
-                    // Fetch correct woeid
-                    this.load_json_async(this.get_weather_url().replace('p=', 'w='), function(weather) {
-                        try {
-                            // Take correct woeid, update gsettings
-                            this._woeid = weather.get_object_member('location').get_string_member('location_id');
-                            this._settings.set_string(WEATHER_WOEID_KEY, this._woeid);
-                            // Load weather with correct woeid
-                            this.refreshWeather(false);
-                        } catch(e) {
-                        }
-                    });
-                    return;
+                /* TODO won't work with the new URL
+                // Fixes wrong woeid if necessary
+                try {
+                    // Wrong woeid specified
+                    if (weather.has_member('code') && weather.get_int_member('code') == 500) {
+                        // Fetch correct woeid
+                        this.load_json_async(this.get_weather_url().replace('p=', 'w='), function(weather) {
+                            try {
+                                // Take correct woeid, update gsettings
+                                this._woeid = weather.get_object_member('location').get_string_member('location_id');
+                                this._settings.set_string(WEATHER_WOEID_KEY, this._woeid);
+                                // Load weather with correct woeid
+                                this.refreshWeather(false);
+                            } catch(e) {
+                            }
+                        });
+                        return;
+                    }
+                } catch(e) {
+                    global.log('A ' + e.name + ' has occured: ' + e.message);
                 }
-            } catch(e) {
-                global.log('A ' + e.name + ' has occured: ' + e.message);
-            }
-            */
+                */
 
-            let location = weather.get_object_member('location').get_string_member('city');
-            if (this._city != null && this._city.length > 0)
-                location = this._city;
+                let location = weather.get_object_member('location').get_string_member('city');
+                if (this._city != null && this._city.length > 0)
+                    location = this._city;
 
-            // Refresh current weather
-            let comment = weather_c.get_string_member('text');
-            if (this._translate_condition)
-                comment = this.get_weather_condition(weather_c.get_string_member('code'));
-
-            let temperature = weather_c.get_string_member('temp');
-            let humidity = weather.get_object_member('atmosphere').get_string_member('humidity') + ' %';
-            let pressure = weather.get_object_member('atmosphere').get_string_member('pressure');
-            let pressure_unit = weather.get_object_member('units').get_string_member('pressure');
-            let wind_direction = this.get_compass_direction(weather.get_object_member('wind').get_string_member('direction'));
-            let wind = weather.get_object_member('wind').get_string_member('speed');
-            let wind_unit = weather.get_object_member('units').get_string_member('speed');
-            let iconname = this.get_weather_icon_safely(weather_c.get_string_member('code'));
-            let sunrise = this._show_sunrise ? weather.get_object_member('astronomy').get_string_member('sunrise') : '';
-            let sunset = this._show_sunrise ? weather.get_object_member('astronomy').get_string_member('sunset') : '';
-            this._currentWeatherIcon.icon_name = this._weatherIcon.icon_name = iconname;
-
-            if (this._comment_in_panel)
-                this._weatherInfo.text = (comment + ' ' + temperature + ' ' + this.unit_to_unicode());
-            else
-                this._weatherInfo.text = (temperature + ' ' + this.unit_to_unicode());
-
-            this._currentWeatherSummary.text = comment;
-            this._currentWeatherTemperature.text = temperature + ' ' + this.unit_to_unicode();
-            this._currentWeatherHumidity.text = humidity;
-            this._currentWeatherPressure.text = pressure + ' ' + pressure_unit;
-
-            if (wind) {
-                // Override wind units with our preference
-                // Need to consider what units the Yahoo API has returned it in
-                switch (this._wind_speed_units) {
-                    case WeatherWindSpeedUnits.KPH:
-                        // Round to whole units
-                        if (this._units == WeatherUnits.FAHRENHEIT) {
-                            wind = Math.round (wind / WEATHER_CONV_MPH_IN_MPS * WEATHER_CONV_KPH_IN_MPS);
-                            wind_unit = 'km/h';
-                        }
-                        // Otherwise no conversion needed - already in correct units
-                        break;
-                    case WeatherWindSpeedUnits.MPH:
-                        // Round to whole units
-                        if (this._units == WeatherUnits.CELSIUS) {
-                            wind = Math.round (wind / WEATHER_CONV_KPH_IN_MPS * WEATHER_CONV_MPH_IN_MPS);
-                            wind_unit = 'mph';
-                        }
-                        // Otherwise no conversion needed - already in correct units
-                        break;
-                    case WeatherWindSpeedUnits.MPS:
-                        // Precision to one decimal place as 1 m/s is quite a large unit
-                        if (this._units == WeatherUnits.CELSIUS)
-                            wind = Math.round ((wind / WEATHER_CONV_KPH_IN_MPS) * 10)/ 10;
-                        else
-                            wind = Math.round ((wind / WEATHER_CONV_MPH_IN_MPS) * 10)/ 10;
-                        wind_unit = 'm/s';
-                        break;
-                    case WeatherWindSpeedUnits.KNOTS:
-                        // Round to whole units
-                        if (this._units == WeatherUnits.CELSIUS)
-                            wind = Math.round (wind / WEATHER_CONV_KPH_IN_MPS * WEATHER_CONV_KNOTS_IN_MPS);
-                        else
-                            wind = Math.round (wind / WEATHER_CONV_MPH_IN_MPS * WEATHER_CONV_KNOTS_IN_MPS);
-                        wind_unit = 'knots';
-                        break;
-                }
-                this._currentWeatherWind.text = (wind_direction && wind > 0 ? wind_direction + ' ' : '') + wind + ' ' + wind_unit;
-            } else
-                this._currentWeatherWind.text = '\u2013';
-
-            this._currentWeatherLocation.label = location + '...';
-            // make the location act like a button
-            this._currentWeatherLocation.style_class = 'weather-current-location-link';
-            this._currentWeatherLocation.url = weather.get_string_member('link');
-            if (this._show_sunrise) {
-                this._currentWeatherSunrise.text = sunrise;
-                this._currentWeatherSunset.text = sunset;
-	    }
-            // Refresh forecast
-            let date_string = [_('Today'), _('Tomorrow')];
-            for (let i = 0; i <= 1; i++) {
-                let forecastUi = this._forecast[i];
-                let forecastData = forecast[i].get_object();
-
-                let code = forecastData.get_string_member('code');
-                let t_low = forecastData.get_string_member('low');
-                let t_high = forecastData.get_string_member('high');
-
-                let comment = forecastData.get_string_member('text');
+                // Refresh current weather
+                let comment = weather_c.get_string_member('text');
                 if (this._translate_condition)
-                    comment = this.get_weather_condition(code);
+                    comment = this.get_weather_condition(weather_c.get_string_member('code'));
 
-                forecastUi.Day.text = date_string[i] + ' (' + this.get_locale_day(forecastData.get_string_member('day')) + ')';
-                forecastUi.Temperature.text = t_low + ' \u2013 ' + t_high + ' ' + this.unit_to_unicode();
-                forecastUi.Summary.text = comment;
-                forecastUi.Icon.icon_name = this.get_weather_icon_safely(code);
-            }
+                let temperature = weather_c.get_string_member('temp');
+                let humidity = weather.get_object_member('atmosphere').get_string_member('humidity') + ' %';
+                let pressure = weather.get_object_member('atmosphere').get_string_member('pressure');
+                let pressure_unit = weather.get_object_member('units').get_string_member('pressure');
+                let wind_direction = this.get_compass_direction(weather.get_object_member('wind').get_string_member('direction'));
+                let wind = weather.get_object_member('wind').get_string_member('speed');
+                let wind_unit = weather.get_object_member('units').get_string_member('speed');
+                let iconname = this.get_weather_icon_safely(weather_c.get_string_member('code'));
+                let sunrise = this._show_sunrise ? weather.get_object_member('astronomy').get_string_member('sunrise') : '';
+                let sunset = this._show_sunrise ? weather.get_object_member('astronomy').get_string_member('sunset') : '';
+                this._currentWeatherIcon.icon_name = this._weatherIcon.icon_name = iconname;
+
+                if (this._comment_in_panel)
+                    this._weatherInfo.text = (comment + ' ' + temperature + ' ' + this.unit_to_unicode());
+                else
+                    this._weatherInfo.text = (temperature + ' ' + this.unit_to_unicode());
+
+                this._currentWeatherSummary.text = comment;
+                this._currentWeatherTemperature.text = temperature + ' ' + this.unit_to_unicode();
+                this._currentWeatherHumidity.text = humidity;
+                this._currentWeatherPressure.text = pressure + ' ' + pressure_unit;
+
+                if (wind) {
+                    // Override wind units with our preference
+                    // Need to consider what units the Yahoo API has returned it in
+                    switch (this._wind_speed_units) {
+                        case WeatherWindSpeedUnits.KPH:
+                            // Round to whole units
+                            if (this._units == WeatherUnits.FAHRENHEIT) {
+                                wind = Math.round (wind / WEATHER_CONV_MPH_IN_MPS * WEATHER_CONV_KPH_IN_MPS);
+                                wind_unit = 'km/h';
+                            }
+                            // Otherwise no conversion needed - already in correct units
+                            break;
+                        case WeatherWindSpeedUnits.MPH:
+                            // Round to whole units
+                            if (this._units == WeatherUnits.CELSIUS) {
+                                wind = Math.round (wind / WEATHER_CONV_KPH_IN_MPS * WEATHER_CONV_MPH_IN_MPS);
+                                wind_unit = 'mph';
+                            }
+                            // Otherwise no conversion needed - already in correct units
+                            break;
+                        case WeatherWindSpeedUnits.MPS:
+                            // Precision to one decimal place as 1 m/s is quite a large unit
+                            if (this._units == WeatherUnits.CELSIUS)
+                                wind = Math.round ((wind / WEATHER_CONV_KPH_IN_MPS) * 10)/ 10;
+                            else
+                                wind = Math.round ((wind / WEATHER_CONV_MPH_IN_MPS) * 10)/ 10;
+                            wind_unit = 'm/s';
+                            break;
+                        case WeatherWindSpeedUnits.KNOTS:
+                            // Round to whole units
+                            if (this._units == WeatherUnits.CELSIUS)
+                                wind = Math.round (wind / WEATHER_CONV_KPH_IN_MPS * WEATHER_CONV_KNOTS_IN_MPS);
+                            else
+                                wind = Math.round (wind / WEATHER_CONV_MPH_IN_MPS * WEATHER_CONV_KNOTS_IN_MPS);
+                            wind_unit = 'knots';
+                            break;
+                    }
+                    this._currentWeatherWind.text = (wind_direction && wind > 0 ? wind_direction + ' ' : '') + wind + ' ' + wind_unit;
+                } else
+                    this._currentWeatherWind.text = '\u2013';
+
+                this._currentWeatherLocation.label = location + '...';
+                // make the location act like a button
+                this._currentWeatherLocation.style_class = 'weather-current-location-link';
+                this._currentWeatherLocation.url = weather.get_string_member('link');
+                if (this._show_sunrise) {
+                    this._currentWeatherSunrise.text = sunrise;
+                    this._currentWeatherSunset.text = sunset;
+                }
+                // Refresh forecast
+                let date_string = [_('Today'), _('Tomorrow')];
+                for (let i = 0; i <= 1; i++) {
+                    let forecastUi = this._forecast[i];
+                    let forecastData = forecast[i].get_object();
+
+                    let code = forecastData.get_string_member('code');
+                    let t_low = forecastData.get_string_member('low');
+                    let t_high = forecastData.get_string_member('high');
+
+                    let comment = forecastData.get_string_member('text');
+                    if (this._translate_condition)
+                        comment = this.get_weather_condition(code);
+
+                    forecastUi.Day.text = date_string[i] + ' (' + this.get_locale_day(forecastData.get_string_member('day')) + ')';
+                    forecastUi.Temperature.text = t_low + ' \u2013 ' + t_high + ' ' + this.unit_to_unicode();
+                    forecastUi.Summary.text = comment;
+                    forecastUi.Icon.icon_name = this.get_weather_icon_safely(code);
+                }
 
             } catch(e) {
                 global.log('A ' + e.name + ' has occured: ' + e.message);
@@ -692,7 +692,7 @@ const WeatherMenuButton = new Lang.Class({
         bb.add_actor(this._currentWeatherLocation);
         bb.add_actor(this._currentWeatherSummary);
 
-	if (this._show_sunrise) {
+        if (this._show_sunrise) {
             this._currentWeatherSunrise = new St.Label({ text: '-' });
             this._currentWeatherSunset = new St.Label({ text: '-' });
 
