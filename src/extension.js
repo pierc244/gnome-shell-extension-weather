@@ -108,6 +108,7 @@ const WeatherMenuButton = new Lang.Class({
         this._symbolic_icons = this._settings.get_boolean(WEATHER_USE_SYMBOLIC_ICONS_KEY);
         this._text_in_panel = this._settings.get_boolean(WEATHER_SHOW_TEXT_IN_PANEL_KEY);
         this._position_in_panel = this._settings.get_enum(WEATHER_POSITION_IN_PANEL_KEY);
+        this._old_position_in_panel = this._position_in_panel;
         this._comment_in_panel = this._settings.get_boolean(WEATHER_SHOW_COMMENT_IN_PANEL_KEY);
         this._refresh_interval = this._settings.get_int(WEATHER_REFRESH_INTERVAL);
 
@@ -132,6 +133,37 @@ const WeatherMenuButton = new Lang.Class({
         this._settings.connect('changed::' + WEATHER_USE_SYMBOLIC_ICONS_KEY, load_settings_and_refresh_weather);
         this._settings.connect('changed::' + WEATHER_REFRESH_INTERVAL, Lang.bind(this, function() {
             this._refresh_interval = this._settings.get_int(WEATHER_REFRESH_INTERVAL);
+        }));
+        /* Allow the position in the panel to change dynamically. */
+        this._settings.connect('changed::' + WEATHER_POSITION_IN_PANEL_KEY, Lang.bind(this, function() {
+            switch (this._old_position_in_panel) {
+            case WeatherPosition.LEFT:
+                Main.panel._leftBox.remove_actor(this.actor);
+                break;
+            case WeatherPosition.CENTER:
+                Main.panel._centerBox.remove_actor(this.actor);
+                break;
+            case WeatherPosition.RIGHT:
+                Main.panel._rightBox.remove_actor(this.actor);
+                break;
+            }
+            this._position_in_panel = this._settings.get_enum(WEATHER_POSITION_IN_PANEL_KEY);
+            let children = null;
+            switch (this._position_in_panel) {
+            case WeatherPosition.LEFT:
+                children = Main.panel._leftBox.get_children();
+                Main.panel._leftBox.insert_child_at_index(this.actor, children.length);
+                break;
+            case WeatherPosition.CENTER:
+                children = Main.panel._centerBox.get_children();
+                Main.panel._centerBox.insert_child_at_index(this.actor, children.length);
+                break;
+            case WeatherPosition.RIGHT:
+                children = Main.panel._rightBox.get_children();
+                Main.panel._rightBox.insert_child_at_index(this.actor, 0);
+                break;
+            }
+            this._old_position_in_panel = this._position_in_panel;
         }));
 
         // Panel icon
