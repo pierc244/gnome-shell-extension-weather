@@ -166,18 +166,18 @@ const WeatherMenuButton = new Lang.Class({
 
         let children = null;
         switch (this._position_in_panel) {
-            case WeatherPosition.LEFT:
-                children = Main.panel._leftBox.get_children();
-                Main.panel._leftBox.insert_child_at_index(this.actor, children.length);
-                break;
-            case WeatherPosition.CENTER:
-                children = Main.panel._centerBox.get_children();
-                Main.panel._centerBox.insert_child_at_index(this.actor, children.length);
-                break;
-            case WeatherPosition.RIGHT:
-                children = Main.panel._rightBox.get_children();
-                Main.panel._rightBox.insert_child_at_index(this.actor, 0);
-                break;
+        case WeatherPosition.LEFT:
+            children = Main.panel._leftBox.get_children();
+            Main.panel._leftBox.insert_child_at_index(this.actor, children.length);
+            break;
+        case WeatherPosition.CENTER:
+            children = Main.panel._centerBox.get_children();
+            Main.panel._centerBox.insert_child_at_index(this.actor, children.length);
+            break;
+        case WeatherPosition.RIGHT:
+            children = Main.panel._rightBox.get_children();
+            Main.panel._rightBox.insert_child_at_index(this.actor, 0);
+            break;
         }
 
         Main.panel.menuManager.addMenu(this.menu);
@@ -250,104 +250,104 @@ const WeatherMenuButton = new Lang.Class({
         /* fallback icons are: weather-clear-night weather-clear weather-few-clouds-night weather-few-clouds weather-fog weather-overcast weather-severe-alert weather-showers weather-showers-scattered weather-snow weather-storm */
         let symbolic = ((this._symbolic_icons) ? '-symbolic' : '');
         switch (parseInt(code, 10)) {
-            case 0:/* tornado */
-                return ['weather-severe-alert' + symbolic];
-            case 1:/* tropical storm */
-                return ['weather-severe-alert' + symbolic];
-            case 2:/* hurricane */
-                return ['weather-severe-alert' + symbolic];
-            case 3:/* severe thunderstorms */
-                return ['weather-severe-alert' + symbolic];
-            case 4:/* thunderstorms */
-                return ['weather-storm' + symbolic];
-            case 5:/* mixed rain and snow */
-                return ['weather-snow-rain' + symbolic, 'weather-snow' + symbolic];
-            case 6:/* mixed rain and sleet */
-                return ['weather-snow-rain' + symbolic, 'weather-snow' + symbolic];
-            case 7:/* mixed snow and sleet */
-                return ['weather-snow' + symbolic];
-            case 8:/* freezing drizzle */
-                return ['weather-freezing-rain' + symbolic, 'weather-showers' + symbolic];
-            case 9:/* drizzle */
-                return ['weather-fog' + symbolic];
-            case 10:/* freezing rain */
-                return ['weather-freezing-rain' + symbolic, 'weather-showers' + symbolic];
-            case 11:/* showers */
-                return ['weather-showers' + symbolic];
-            case 12:/* showers */
-                return ['weather-showers' + symbolic];
-            case 13:/* snow flurries */
-                return ['weather-snow' + symbolic];
-            case 14:/* light snow showers */
-                return ['weather-snow' + symbolic];
-            case 15:/* blowing snow */
-                return ['weather-snow' + symbolic];
-            case 16:/* snow */
-                return ['weather-snow' + symbolic];
-            case 17:/* hail */
-                return ['weather-snow' + symbolic];
-            case 18:/* sleet */
-                return ['weather-snow' + symbolic];
-            case 19:/* dust */
-                return ['weather-fog' + symbolic];
-            case 20:/* foggy */
-                return ['weather-fog' + symbolic];
-            case 21:/* haze */
-                return ['weather-fog' + symbolic];
-            case 22:/* smoky */
-                return ['weather-fog' + symbolic];
-            case 23:/* blustery */
-                return ['weather-few-clouds' + symbolic];
-            case 24:/* windy */
-                return ['weather-few-clouds' + symbolic];
-            case 25:/* cold */
-                return ['weather-few-clouds' + symbolic];
-            case 26:/* cloudy */
-                return ['weather-overcast' + symbolic];
-            case 27:/* mostly cloudy (night) */
-                return ['weather-clouds-night' + symbolic, 'weather-few-clouds-night' + symbolic];
-            case 28:/* mostly cloudy (day) */
-                return ['weather-clouds' + symbolic, 'weather-overcast' + symbolic];
-            case 29:/* partly cloudy (night) */
-                return ['weather-few-clouds-night' + symbolic];
-            case 30:/* partly cloudy (day) */
-                return ['weather-few-clouds' + symbolic];
-            case 31:/* clear (night) */
-                return ['weather-clear-night' + symbolic];
-            case 32:/* sunny */
-                return ['weather-clear' + symbolic];
-            case 33:/* fair (night) */
-                return ['weather-clear-night' + symbolic];
-            case 34:/* fair (day) */
-                return ['weather-clear' + symbolic];
-            case 35:/* mixed rain and hail */
-                return ['weather-snow-rain' + symbolic, 'weather-showers' + symbolic];
-            case 36:/* hot */
-                return ['weather-clear' + symbolic];
-            case 37:/* isolated thunderstorms */
-                return ['weather-storm' + symbolic];
-            case 38:/* scattered thunderstorms */
-                return ['weather-storm' + symbolic];
-            case 39:/* http://developer.yahoo.com/forum/YDN-Documentation/Yahoo-Weather-API-Wrong-Condition-Code/1290534174000-1122fc3d-da6d-34a2-9fb9-d0863e6c5bc6 */
-            case 40:/* scattered showers */
-                return ['weather-showers-scattered' + symbolic, 'weather-showers' + symbolic];
-            case 41:/* heavy snow */
-                return ['weather-snow' + symbolic];
-            case 42:/* scattered snow showers */
-                return ['weather-snow' + symbolic];
-            case 43:/* heavy snow */
-                return ['weather-snow' + symbolic];
-            case 44:/* partly cloudy */
-                return ['weather-few-clouds' + symbolic];
-            case 45:/* thundershowers */
-                return ['weather-storm' + symbolic];
-            case 46:/* snow showers */
-                return ['weather-snow' + symbolic];
-            case 47:/* isolated thundershowers */
-                return ['weather-storm' + symbolic];
-            case 3200:/* not available */
-            default:
-                return ['weather-severe-alert' + symbolic];
+        case 0:/* tornado */
+            return ['weather-severe-alert' + symbolic];
+        case 1:/* tropical storm */
+            return ['weather-severe-alert' + symbolic];
+        case 2:/* hurricane */
+            return ['weather-severe-alert' + symbolic];
+        case 3:/* severe thunderstorms */
+            return ['weather-severe-alert' + symbolic];
+        case 4:/* thunderstorms */
+            return ['weather-storm' + symbolic];
+        case 5:/* mixed rain and snow */
+            return ['weather-snow-rain' + symbolic, 'weather-snow' + symbolic];
+        case 6:/* mixed rain and sleet */
+            return ['weather-snow-rain' + symbolic, 'weather-snow' + symbolic];
+        case 7:/* mixed snow and sleet */
+            return ['weather-snow' + symbolic];
+        case 8:/* freezing drizzle */
+            return ['weather-freezing-rain' + symbolic, 'weather-showers' + symbolic];
+        case 9:/* drizzle */
+            return ['weather-fog' + symbolic];
+        case 10:/* freezing rain */
+            return ['weather-freezing-rain' + symbolic, 'weather-showers' + symbolic];
+        case 11:/* showers */
+            return ['weather-showers' + symbolic];
+        case 12:/* showers */
+            return ['weather-showers' + symbolic];
+        case 13:/* snow flurries */
+            return ['weather-snow' + symbolic];
+        case 14:/* light snow showers */
+            return ['weather-snow' + symbolic];
+        case 15:/* blowing snow */
+            return ['weather-snow' + symbolic];
+        case 16:/* snow */
+            return ['weather-snow' + symbolic];
+        case 17:/* hail */
+            return ['weather-snow' + symbolic];
+        case 18:/* sleet */
+            return ['weather-snow' + symbolic];
+        case 19:/* dust */
+            return ['weather-fog' + symbolic];
+        case 20:/* foggy */
+            return ['weather-fog' + symbolic];
+        case 21:/* haze */
+            return ['weather-fog' + symbolic];
+        case 22:/* smoky */
+            return ['weather-fog' + symbolic];
+        case 23:/* blustery */
+            return ['weather-few-clouds' + symbolic];
+        case 24:/* windy */
+            return ['weather-few-clouds' + symbolic];
+        case 25:/* cold */
+            return ['weather-few-clouds' + symbolic];
+        case 26:/* cloudy */
+            return ['weather-overcast' + symbolic];
+        case 27:/* mostly cloudy (night) */
+            return ['weather-clouds-night' + symbolic, 'weather-few-clouds-night' + symbolic];
+        case 28:/* mostly cloudy (day) */
+            return ['weather-clouds' + symbolic, 'weather-overcast' + symbolic];
+        case 29:/* partly cloudy (night) */
+            return ['weather-few-clouds-night' + symbolic];
+        case 30:/* partly cloudy (day) */
+            return ['weather-few-clouds' + symbolic];
+        case 31:/* clear (night) */
+            return ['weather-clear-night' + symbolic];
+        case 32:/* sunny */
+            return ['weather-clear' + symbolic];
+        case 33:/* fair (night) */
+            return ['weather-clear-night' + symbolic];
+        case 34:/* fair (day) */
+            return ['weather-clear' + symbolic];
+        case 35:/* mixed rain and hail */
+            return ['weather-snow-rain' + symbolic, 'weather-showers' + symbolic];
+        case 36:/* hot */
+            return ['weather-clear' + symbolic];
+        case 37:/* isolated thunderstorms */
+            return ['weather-storm' + symbolic];
+        case 38:/* scattered thunderstorms */
+            return ['weather-storm' + symbolic];
+        case 39:/* http://developer.yahoo.com/forum/YDN-Documentation/Yahoo-Weather-API-Wrong-Condition-Code/1290534174000-1122fc3d-da6d-34a2-9fb9-d0863e6c5bc6 */
+        case 40:/* scattered showers */
+            return ['weather-showers-scattered' + symbolic, 'weather-showers' + symbolic];
+        case 41:/* heavy snow */
+            return ['weather-snow' + symbolic];
+        case 42:/* scattered snow showers */
+            return ['weather-snow' + symbolic];
+        case 43:/* heavy snow */
+            return ['weather-snow' + symbolic];
+        case 44:/* partly cloudy */
+            return ['weather-few-clouds' + symbolic];
+        case 45:/* thundershowers */
+            return ['weather-storm' + symbolic];
+        case 46:/* snow showers */
+            return ['weather-snow' + symbolic];
+        case 47:/* isolated thundershowers */
+            return ['weather-storm' + symbolic];
+        case 3200:/* not available */
+        default:
+            return ['weather-severe-alert' + symbolic];
         }
     },
 
@@ -366,101 +366,101 @@ const WeatherMenuButton = new Lang.Class({
 
     get_weather_condition: function(code) {
         switch (parseInt(code, 10)){
-            case 0:/* tornado */
-                return _('Tornado');
-            case 1:/* tropical storm */
-                return _('Tropical storm');
-            case 2:/* hurricane */
-                return _('Hurricane');
-            case 3:/* severe thunderstorms */
-                return _('Severe thunderstorms');
-            case 4:/* thunderstorms */
-                return _('Thunderstorms');
-            case 5:/* mixed rain and snow */
-                return _('Mixed rain and snow');
-            case 6:/* mixed rain and sleet */
-                return _('Mixed rain and sleet');
-            case 7:/* mixed snow and sleet */
-                return _('Mixed snow and sleet');
-            case 8:/* freezing drizzle */
-                return _('Freezing drizzle');
-            case 9:/* drizzle */
-                return _('Drizzle');
-            case 10:/* freezing rain */
-                return _('Freezing rain');
-            case 11:/* showers */
-                return _('Showers');
-            case 12:/* showers */
-                return _('Showers');
-            case 13:/* snow flurries */
-                return _('Snow flurries');
-            case 14:/* light snow showers */
-                return _('Light snow showers');
-            case 15:/* blowing snow */
-                return _('Blowing snow');
-            case 16:/* snow */
-                return _('Snow');
-            case 17:/* hail */
-                return _('Hail');
-            case 18:/* sleet */
-                return _('Sleet');
-            case 19:/* dust */
-                return _('Dust');
-            case 20:/* foggy */
-                return _('Foggy');
-            case 21:/* haze */
-                return _('Haze');
-            case 22:/* smoky */
-                return _('Smoky');
-            case 23:/* blustery */
-                return _('Blustery');
-            case 24:/* windy */
-                return _('Windy');
-            case 25:/* cold */
-                return _('Cold');
-            case 26:/* cloudy */
-                return _('Cloudy');
-            case 27:/* mostly cloudy (night) */
-            case 28:/* mostly cloudy (day) */
-                return _('Mostly cloudy');
-            case 29:/* partly cloudy (night) */
-            case 30:/* partly cloudy (day) */
-                return _('Partly cloudy');
-            case 31:/* clear (night) */
-                return _('Clear');
-            case 32:/* sunny */
-                return _('Sunny');
-            case 33:/* fair (night) */
-            case 34:/* fair (day) */
-                return _('Fair');
-            case 35:/* mixed rain and hail */
-                return _('Mixed rain and hail');
-            case 36:/* hot */
-                return _('Hot');
-            case 37:/* isolated thunderstorms */
-                return _('Isolated thunderstorms');
-            case 38:/* scattered thunderstorms */
-            case 39:/* scattered thunderstorms */
-                return _('Scattered thunderstorms');
-            case 40:/* scattered showers */
-                return _('Scattered showers');
-            case 41:/* heavy snow */
-                return _('Heavy snow');
-            case 42:/* scattered snow showers */
-                return _('Scattered snow showers');
-            case 43:/* heavy snow */
-                return _('Heavy snow');
-            case 44:/* partly cloudy */
-                return _('Partly cloudy');
-            case 45:/* thundershowers */
-                return _('Thundershowers');
-            case 46:/* snow showers */
-                return _('Snow showers');
-            case 47:/* isolated thundershowers */
-                return _('Isolated thundershowers');
-            case 3200:/* not available */
-            default:
-                return _('Not available');
+        case 0:/* tornado */
+            return _('Tornado');
+        case 1:/* tropical storm */
+            return _('Tropical storm');
+        case 2:/* hurricane */
+            return _('Hurricane');
+        case 3:/* severe thunderstorms */
+            return _('Severe thunderstorms');
+        case 4:/* thunderstorms */
+            return _('Thunderstorms');
+        case 5:/* mixed rain and snow */
+            return _('Mixed rain and snow');
+        case 6:/* mixed rain and sleet */
+            return _('Mixed rain and sleet');
+        case 7:/* mixed snow and sleet */
+            return _('Mixed snow and sleet');
+        case 8:/* freezing drizzle */
+            return _('Freezing drizzle');
+        case 9:/* drizzle */
+            return _('Drizzle');
+        case 10:/* freezing rain */
+            return _('Freezing rain');
+        case 11:/* showers */
+            return _('Showers');
+        case 12:/* showers */
+            return _('Showers');
+        case 13:/* snow flurries */
+            return _('Snow flurries');
+        case 14:/* light snow showers */
+            return _('Light snow showers');
+        case 15:/* blowing snow */
+            return _('Blowing snow');
+        case 16:/* snow */
+            return _('Snow');
+        case 17:/* hail */
+            return _('Hail');
+        case 18:/* sleet */
+            return _('Sleet');
+        case 19:/* dust */
+            return _('Dust');
+        case 20:/* foggy */
+            return _('Foggy');
+        case 21:/* haze */
+            return _('Haze');
+        case 22:/* smoky */
+            return _('Smoky');
+        case 23:/* blustery */
+            return _('Blustery');
+        case 24:/* windy */
+            return _('Windy');
+        case 25:/* cold */
+            return _('Cold');
+        case 26:/* cloudy */
+            return _('Cloudy');
+        case 27:/* mostly cloudy (night) */
+        case 28:/* mostly cloudy (day) */
+            return _('Mostly cloudy');
+        case 29:/* partly cloudy (night) */
+        case 30:/* partly cloudy (day) */
+            return _('Partly cloudy');
+        case 31:/* clear (night) */
+            return _('Clear');
+        case 32:/* sunny */
+            return _('Sunny');
+        case 33:/* fair (night) */
+        case 34:/* fair (day) */
+            return _('Fair');
+        case 35:/* mixed rain and hail */
+            return _('Mixed rain and hail');
+        case 36:/* hot */
+            return _('Hot');
+        case 37:/* isolated thunderstorms */
+            return _('Isolated thunderstorms');
+        case 38:/* scattered thunderstorms */
+        case 39:/* scattered thunderstorms */
+            return _('Scattered thunderstorms');
+        case 40:/* scattered showers */
+            return _('Scattered showers');
+        case 41:/* heavy snow */
+            return _('Heavy snow');
+        case 42:/* scattered snow showers */
+            return _('Scattered snow showers');
+        case 43:/* heavy snow */
+            return _('Heavy snow');
+        case 44:/* partly cloudy */
+            return _('Partly cloudy');
+        case 45:/* thundershowers */
+            return _('Thundershowers');
+        case 46:/* snow showers */
+            return _('Snow showers');
+        case 47:/* isolated thundershowers */
+            return _('Isolated thundershowers');
+        case 3200:/* not available */
+        default:
+            return _('Not available');
         }
     },
 
@@ -561,38 +561,38 @@ const WeatherMenuButton = new Lang.Class({
                     // Override wind units with our preference
                     // Need to consider what units the Yahoo API has returned it in
                     switch (this._wind_speed_units) {
-                        case WeatherWindSpeedUnits.KPH:
-                            // Round to whole units
-                            if (this._units == WeatherUnits.FAHRENHEIT) {
-                                wind = Math.round (wind / WEATHER_CONV_MPH_IN_MPS * WEATHER_CONV_KPH_IN_MPS);
-                                wind_unit = 'km/h';
-                            }
-                            // Otherwise no conversion needed - already in correct units
-                            break;
-                        case WeatherWindSpeedUnits.MPH:
-                            // Round to whole units
-                            if (this._units == WeatherUnits.CELSIUS) {
-                                wind = Math.round (wind / WEATHER_CONV_KPH_IN_MPS * WEATHER_CONV_MPH_IN_MPS);
-                                wind_unit = 'mph';
-                            }
-                            // Otherwise no conversion needed - already in correct units
-                            break;
-                        case WeatherWindSpeedUnits.MPS:
-                            // Precision to one decimal place as 1 m/s is quite a large unit
-                            if (this._units == WeatherUnits.CELSIUS)
-                                wind = Math.round ((wind / WEATHER_CONV_KPH_IN_MPS) * 10)/ 10;
-                            else
-                                wind = Math.round ((wind / WEATHER_CONV_MPH_IN_MPS) * 10)/ 10;
-                            wind_unit = 'm/s';
-                            break;
-                        case WeatherWindSpeedUnits.KNOTS:
-                            // Round to whole units
-                            if (this._units == WeatherUnits.CELSIUS)
-                                wind = Math.round (wind / WEATHER_CONV_KPH_IN_MPS * WEATHER_CONV_KNOTS_IN_MPS);
-                            else
-                                wind = Math.round (wind / WEATHER_CONV_MPH_IN_MPS * WEATHER_CONV_KNOTS_IN_MPS);
-                            wind_unit = 'knots';
-                            break;
+                    case WeatherWindSpeedUnits.KPH:
+                        // Round to whole units
+                        if (this._units == WeatherUnits.FAHRENHEIT) {
+                            wind = Math.round (wind / WEATHER_CONV_MPH_IN_MPS * WEATHER_CONV_KPH_IN_MPS);
+                            wind_unit = 'km/h';
+                        }
+                        // Otherwise no conversion needed - already in correct units
+                        break;
+                    case WeatherWindSpeedUnits.MPH:
+                        // Round to whole units
+                        if (this._units == WeatherUnits.CELSIUS) {
+                            wind = Math.round (wind / WEATHER_CONV_KPH_IN_MPS * WEATHER_CONV_MPH_IN_MPS);
+                            wind_unit = 'mph';
+                        }
+                        // Otherwise no conversion needed - already in correct units
+                        break;
+                    case WeatherWindSpeedUnits.MPS:
+                        // Precision to one decimal place as 1 m/s is quite a large unit
+                        if (this._units == WeatherUnits.CELSIUS)
+                            wind = Math.round ((wind / WEATHER_CONV_KPH_IN_MPS) * 10)/ 10;
+                        else
+                            wind = Math.round ((wind / WEATHER_CONV_MPH_IN_MPS) * 10)/ 10;
+                        wind_unit = 'm/s';
+                        break;
+                    case WeatherWindSpeedUnits.KNOTS:
+                        // Round to whole units
+                        if (this._units == WeatherUnits.CELSIUS)
+                            wind = Math.round (wind / WEATHER_CONV_KPH_IN_MPS * WEATHER_CONV_KNOTS_IN_MPS);
+                        else
+                            wind = Math.round (wind / WEATHER_CONV_MPH_IN_MPS * WEATHER_CONV_KNOTS_IN_MPS);
+                        wind_unit = 'knots';
+                        break;
                     }
                     this._currentWeatherWind.text = (wind_direction && wind > 0 ? wind_direction + ' ' : '') + wind + ' ' + wind_unit;
                 } else
