@@ -121,6 +121,7 @@ const WeatherMenuButton = new Lang.Class({
             this._translate_condition = this._settings.get_boolean(WEATHER_TRANSLATE_CONDITION_KEY);
             this._show_sunrise = this._settings.get_boolean(WEATHER_SHOW_SUNRISE_SUNSET_KEY);
             this._symbolic_icons = this._settings.get_boolean(WEATHER_USE_SYMBOLIC_ICONS_KEY);
+            this._text_in_panel = this._settings.get_boolean(WEATHER_SHOW_TEXT_IN_PANEL_KEY);
             this._comment_in_panel = this._settings.get_boolean(WEATHER_SHOW_COMMENT_IN_PANEL_KEY);
             this.refreshWeather(false);
         });
@@ -131,6 +132,7 @@ const WeatherMenuButton = new Lang.Class({
         this._settings.connect('changed::' + WEATHER_TRANSLATE_CONDITION_KEY, load_settings_and_refresh_weather);
         this._settings.connect('changed::' + WEATHER_SHOW_COMMENT_IN_PANEL_KEY, load_settings_and_refresh_weather);
         this._settings.connect('changed::' + WEATHER_USE_SYMBOLIC_ICONS_KEY, load_settings_and_refresh_weather);
+        this._settings.connect('changed::' + WEATHER_SHOW_TEXT_IN_PANEL_KEY, load_settings_and_refresh_weather);
         this._settings.connect('changed::' + WEATHER_REFRESH_INTERVAL, Lang.bind(this, function() {
             this._refresh_interval = this._settings.get_int(WEATHER_REFRESH_INTERVAL);
         }));
@@ -187,6 +189,8 @@ const WeatherMenuButton = new Lang.Class({
         if (this._text_in_panel)
             topBox.add_actor(this._weatherInfo);
         this.actor.add_actor(topBox);
+        // We need the box to dynamically change the text in the panel.
+        this._topBox = topBox;
 
         /* I really want to know why I need to reparent the button
            before I can safely insert it in one of the panel
@@ -656,6 +660,12 @@ const WeatherMenuButton = new Lang.Class({
                     forecastUi.Temperature.text = t_low + ' \u2013 ' + t_high + ' ' + this.unit_to_unicode();
                     forecastUi.Summary.text = comment;
                     forecastUi.Icon.icon_name = this.get_weather_icon_safely(code);
+                }
+                if (this._text_in_panel) {
+                    if (!this._topBox.contains(this._weatherInfo))
+                        this._topBox.add_actor(this._weatherInfo);
+                } else if (this._topBox.contains(this._weatherInfo)) {
+                    this._topBox.remove_actor(this._weatherInfo);
                 }
 
             } catch(e) {
