@@ -13,5 +13,6 @@ staging/
 *~
 *.gmo
 metadata.json
+prefs.js
 *.gschema.xml
 *.gschema.valid
