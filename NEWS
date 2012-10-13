@@ -1,0 +1,12 @@
+2012-10-12: Forked the project from:
+
+	https://github.com/simon04/gnome-shell-extension-weather
+
+   to
+
+	https://github.com/canek-pelaez/gnome-shell-extension-weather
+
+   Also, ported the code so it works in GNOME Shell 3.6, fixed some
+   issues, improved the build system, and added support for
+   preferences using the gnome-shell-extension-prefs tool.
+
