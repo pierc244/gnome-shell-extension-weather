@@ -1,6 +1,7 @@
 Makefile
 Makefile.in
 Makefile.in.in
+ChangeLog
 configure
 config.log
 config.status
