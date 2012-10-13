@@ -807,7 +807,9 @@ const WeatherMenuButton = new Lang.Class({
         let xb = new St.BoxLayout();
         xb.add_actor(bb);
         xb.add_actor(rb);
-        xb.add_actor(this.getPreferencesIcon());
+	/* We now configure the extension using the
+	   gnome-shell-extension-prefs tool. */
+        //xb.add_actor(this.getPreferencesIcon());
 
         let box = new St.BoxLayout({
             style_class: 'weather-current-iconbox'
