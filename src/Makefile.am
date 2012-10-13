@@ -1,4 +1,4 @@
-extensionurl = https://github.com/simon04/gnome-shell-extension-weather
+extensionurl = https://github.com/canek-pelaez/gnome-shell-extension-weather
 
 # Change these to modify how installation is performed
 topextensiondir = $(datadir)/gnome-shell/extensions
@@ -7,8 +7,8 @@ uuid = weather@gnome-shell-extensions.gnome.org
 
 extensiondir = $(topextensiondir)/$(uuid)
 
-dist_extension_DATA = extension.js stylesheet.css
-nodist_extension_DATA = metadata.json $(EXTRA_EXTENSION)
+dist_extension_DATA = extension.js stylesheet.css prefs.xml 
+nodist_extension_DATA = metadata.json prefs.js $(EXTRA_EXTENSION)
 
 EXTRA_DIST = metadata.json.in
 
@@ -29,3 +29,9 @@ gsettings_SCHEMAS = $(gschemas_in:.xml.in=.xml)
 
 CLEANFILES += $(gschemas_in:.xml.in=.valid) $(gsettings_SCHEMAS)
 EXTRA_DIST += $(gschemas_in)
+
+prefs.js: prefs.js.in $(top_builddir)/config.status
+	$(AM_V_GEN) sed -e "s|[@]TOPEXTENSIONDIR@|$(topextensiondir)|" $< > $@
+
+CLEANFILES += prefs.js
+EXTRA_DIST += prefs.js.in
