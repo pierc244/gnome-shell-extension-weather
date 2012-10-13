@@ -22,6 +22,7 @@ GLIB_GSETTINGS
 dnl Please keep this sorted alphabetically
 AC_CONFIG_FILES([
   Makefile
+  data/Makefile
   po/Makefile.in
   src/Makefile
 ])
