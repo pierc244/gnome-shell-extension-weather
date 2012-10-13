@@ -131,6 +131,7 @@ const WeatherMenuButton = new Lang.Class({
         this._settings.connect('changed::' + WEATHER_WOEID_KEY, load_settings_and_refresh_weather);
         this._settings.connect('changed::' + WEATHER_TRANSLATE_CONDITION_KEY, load_settings_and_refresh_weather);
         this._settings.connect('changed::' + WEATHER_SHOW_COMMENT_IN_PANEL_KEY, load_settings_and_refresh_weather);
+        this._settings.connect('changed::' + WEATHER_SHOW_SUNRISE_SUNSET_KEY, load_settings_and_refresh_weather);
         this._settings.connect('changed::' + WEATHER_USE_SYMBOLIC_ICONS_KEY, load_settings_and_refresh_weather);
         this._settings.connect('changed::' + WEATHER_SHOW_TEXT_IN_PANEL_KEY, load_settings_and_refresh_weather);
         this._settings.connect('changed::' + WEATHER_REFRESH_INTERVAL, Lang.bind(this, function() {
@@ -639,8 +640,17 @@ const WeatherMenuButton = new Lang.Class({
                 this._currentWeatherLocation.style_class = 'weather-current-location-link';
                 this._currentWeatherLocation.url = weather.get_string_member('link');
                 if (this._show_sunrise) {
+                    if (this._sunrise_actor == null) {
+                        this._sunrise_actor = this.createSunriseSunsetLabels();
+                        this._sunrise_box.add_actor(this._sunrise_actor);
+                    }
                     this._currentWeatherSunrise.text = sunrise;
                     this._currentWeatherSunset.text = sunset;
+                } else {
+                    if (this._sunrise_actor != null) {
+                        this._sunrise_actor.destroy();
+                        this._sunrise_actor = null;
+                    }
                 }
                 // Refresh forecast
                 let date_string = [_('Today'), _('Tomorrow')];
@@ -699,6 +709,29 @@ const WeatherMenuButton = new Lang.Class({
         this._futureWeather.set_child(new St.Label({ text: _('Loading future weather ...') }));
     },
 
+    createSunriseSunsetLabels: function() {
+        this._currentWeatherSunrise = new St.Label({ text: '-' });
+        this._currentWeatherSunset = new St.Label({ text: '-' });
+
+        let ab = new St.BoxLayout({
+            style_class: 'weather-current-astronomy'
+        });
+
+        let ab_sunriselabel = new St.Label({ text: _('Sunrise') + ': ' });
+        let ab_spacerlabel = new St.Label({ text: '   ' });
+        let ab_sunsetlabel = new St.Label({ text: _('Sunset') + ': ' });
+
+        ab.add_actor(ab_spacerlabel);
+        ab.add_actor(ab_sunriselabel);
+        ab.add_actor(this._currentWeatherSunrise);
+        ab_spacerlabel = new St.Label({ text: '   ' });
+        ab.add_actor(ab_spacerlabel);
+        ab.add_actor(ab_sunsetlabel);
+        ab.add_actor(this._currentWeatherSunset);
+
+        return ab;
+    },
+
     rebuildCurrentWeatherUi: function() {
         this.destroyCurrentWeather();
 
@@ -734,28 +767,14 @@ const WeatherMenuButton = new Lang.Class({
         bb.add_actor(this._currentWeatherLocation);
         bb.add_actor(this._currentWeatherSummary);
 
+        this._sunrise_actor = null;
         if (this._show_sunrise) {
-            this._currentWeatherSunrise = new St.Label({ text: '-' });
-            this._currentWeatherSunset = new St.Label({ text: '-' });
-
-            let ab = new St.BoxLayout({
-                style_class: 'weather-current-astronomy'
-            });
-
-            let ab_sunriselabel = new St.Label({ text: _('Sunrise') + ': ' });
-            let ab_spacerlabel = new St.Label({ text: '   ' });
-            let ab_sunsetlabel = new St.Label({ text: _('Sunset') + ': ' });
-
-            ab.add_actor(ab_sunriselabel);
-            ab.add_actor(this._currentWeatherSunrise);
-            ab.add_actor(ab_spacerlabel);
-            ab.add_actor(ab_sunsetlabel);
-            ab.add_actor(this._currentWeatherSunset);
-
-            let bb_spacerlabel = new St.Label({ text: '   ' });
-            bb.add_actor(bb_spacerlabel);
-            bb.add_actor(ab);
+            this._sunrise_actor = this.createSunriseSunsetLabels();
+            bb.add_actor(this._sunrise_actor);
         }
+        /* We need the box so we can destroy/create the labels when
+           the user wants to. */
+        this._sunrise_box = bb;
         // Other labels
         this._currentWeatherTemperature = new St.Label({ text: '...' });
         this._currentWeatherHumidity = new St.Label({ text:  '...' });
