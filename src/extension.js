@@ -45,6 +45,10 @@ const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+const Convenience = Me.imports.convenience;
+
 // Settings
 const WEATHER_SETTINGS_SCHEMA = 'org.gnome.shell.extensions.weather';
 const WEATHER_UNIT_KEY = 'unit';
@@ -85,12 +89,6 @@ const WEATHER_CONV_KNOTS_IN_MPS = 1.94384449;
 const _httpSession = new Soup.SessionAsync();
 Soup.Session.prototype.add_feature.call(_httpSession, new Soup.ProxyResolverDefault());
 
-function getSettings(schema) {
-    if (Gio.Settings.list_schemas().indexOf(schema) == -1)
-        throw _("Schema \"%s\" not found.").format(schema);
-    return new Gio.Settings({ schema: schema });
-}
-
 /* New form of inheritance. */
 const WeatherMenuButton = new Lang.Class({
     Name: 'WeatherMenuButton',
@@ -98,7 +96,7 @@ const WeatherMenuButton = new Lang.Class({
 
     _init: function() {
         // Load settings
-        this._settings = getSettings(WEATHER_SETTINGS_SCHEMA);
+        this._settings = Convenience.getSettings(WEATHER_SETTINGS_SCHEMA);
         this._units = this._settings.get_enum(WEATHER_UNIT_KEY);
         this._wind_speed_units = this._settings.get_enum(WEATHER_WIND_SPEED_UNIT_KEY);
         this._city  = this._settings.get_string(WEATHER_CITY_KEY);
@@ -891,6 +889,7 @@ const WeatherMenuButton = new Lang.Class({
 let weatherMenu;
 
 function init() {
+    Convenience.initTranslations('gnome-shell-extension-weather');
 }
 
 function enable() {
