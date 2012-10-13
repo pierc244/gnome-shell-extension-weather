@@ -1,3 +1,12 @@
+2012-10-13: Added option to install the extension locally; now the
+   user can do:
+
+	./autogen.sh --prefix=$HOME/.local --with-local-install=yes
+	make
+	make install
+
+   and the extension will be installed locally in her $HOME.
+
 2012-10-12: Forked the project from:
 
 	https://github.com/simon04/gnome-shell-extension-weather
@@ -9,4 +18,3 @@
    Also, ported the code so it works in GNOME Shell 3.6, fixed some
    issues, improved the build system, and added support for
    preferences using the gnome-shell-extension-prefs tool.
-
