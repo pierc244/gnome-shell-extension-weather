@@ -32,7 +32,7 @@ const _ = Gettext.gettext;
 const Lang = imports.lang;
 const ExtensionUtils = imports.misc.extensionUtils;
 
-const WEATHER_PREFS_UI = '@TOPEXTENSIONDIR@/weather@gnome-shell-extensions.gnome.org/prefs.glade';
+const WEATHER_PREFS_UI = '@TOPEXTENSIONDIR@/weather@gnome-shell-extensions.gnome.org/prefs.xml';
 const WEATHER_SETTINGS_SCHEMA = 'org.gnome.shell.extensions.weather';
 
 const WeatherUnits = {
