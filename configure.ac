@@ -1,11 +1,11 @@
 AC_PREREQ(2.63)
 dnl be carefull, the version needs to be in sync with your gnome shell version
-AC_INIT([gnome-shell-extension-weather],[1.0],[https://github.com/ecyrbe/gnome-shell-extension-weather/issues])
+AC_INIT([gnome-shell-extension-weather],[1.1],[https://github.com/ecyrbe/gnome-shell-extension-weather/issues])
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([config])
 
-AM_INIT_AUTOMAKE([1.10 dist-bzip2 no-dist-gzip foreign tar-ustar])
+AM_INIT_AUTOMAKE([1.10 dist-xz])
 
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
