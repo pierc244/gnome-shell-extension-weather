@@ -263,12 +263,12 @@ const WeatherMenuButton = new Lang.Class({
     },
 
     get_weather_url: function() {
+        let server = 'http://query.yahooapis.com/v1/public/yql?format=json&q=';
         let query = 'select link,location,wind,atmosphere,units,'+
             'item.condition,item.forecast,astronomy from weather.forecast '+
             'where location="' + this._woeid + '" and u="' +
             this.unit_to_url() + '"';
-        let server = 'http://query.yahooapis.com/v1/public/yql?format=json&q=';
-        return query + server;
+        return server + query;
     },
 
     get_weather_icon: function(code) {
