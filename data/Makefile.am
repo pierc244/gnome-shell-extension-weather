@@ -13,8 +13,7 @@ EXTRA_DIST = metadata.json.in
 CLEANFILES = metadata.json
 
 metadata.json: metadata.json.in $(top_builddir)/config.status
-	$(AM_V_GEN) sed -e "s|[@]LOCALEDIR@|$(LOCALEDIR)|" \
-	    -e "s|[@]uuid@|$(uuid)|" \
+	$(AM_V_GEN) sed -e "s|[@]uuid@|$(uuid)|" \
 	    -e "s|[@]url@|$(extensionurl)|" $< > $@
 
 gschemas_in = org.gnome.shell.extensions.weather.gschema.xml.in
