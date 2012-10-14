@@ -304,7 +304,7 @@ const Widget = new GObject.Class({
 	let r = this._search_woeid_dialog.run();
 	let woeid = '';
 	let [ success, iter ] = this._locations_combobox.get_active_iter();
-	if (success)
+	if (success && r == Gtk.ResponseType.OK)
 	    woeid  = this._woeids_liststore.get_value(iter, 2);
 	if (r != Gtk.ResponseType.DELETE_EVENT)
 	    this._search_woeid_dialog.destroy();
