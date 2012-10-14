@@ -8,7 +8,7 @@ if LOCAL_INSTALL
 	$(MKDIR_P) $(builddir)/_build; \
 	$(MAKE) install DESTDIR="$(abs_builddir)/_build"; \
 	$(GLIB_COMPILE_SCHEMAS) "$(abs_builddir)/_build/$(prefix)/share/gnome-shell/extensions/weather@gnome-shell-extensions.gnome.org/schemas"; \
-	(cd "$(abs_builddir)/_build/$(prefix)/share/gnome-shell/extensions" ; \
+	(cd "$(abs_builddir)/_build/$(prefix)/share/gnome-shell/extensions/weather@gnome-shell-extensions.gnome.org" ; \
 	zip -qr "$(abs_builddir)/weather-indicator.shell-extension.zip" .; \
 	); \
 	rm -fR $(builddir)/_build ; \
