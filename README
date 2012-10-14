@@ -58,9 +58,15 @@ Configuration
 -------------
 
 You can use the gnome-shell-extension-prefs tool to configure the
-extension. All the configuration changes are reflected in the
-extension immediately, there is no need to disable and enable again
-the extension.
+extension. To launch the gnome-shell-extension-prefs tool you can
+either do Alt+F2 gnome-shell-extension-prefs ENTER, or you can go to
+the Shell Extension section of the Tweak Tool. Next to the check
+button for the Weather Extension should be a button that launches
+the gnome-shell-extension-prefs tool.
+
+ All the configuration changes are reflected in the extension
+immediately, there is no need to disable and enable again the
+extension.
 
 You can see more screenshots of the gnome-shell-extension-prefs tool
 in action in the Screenshots page.
@@ -68,15 +74,12 @@ in action in the Screenshots page.
 Location
 --------
 
-At the moment, only WOEIDs consisting of 4 uppercase letters
-followed by 4 digits are supported. Determine your WOEID using
-edg3.co.uk:
-
-http://edg3.co.uk/snippets/weather-location-codes/
-
-or xoap.weather.com:
-
-http://xoap.weather.com/search/search?where=Innsbruck
+The GNOME Shell Weather Extension uses WOEIDs to know what weather
+data should be requested. The preferences for the extension includes
+a WOEID searcher: you only need to click in the "Search for WOEID"
+button, enter the name of your town or city, and press ENTER or
+click in the "Search" button. A list of locations that matches your
+search will fill the combo box so you can select the correct one.
 
 License
 -------
