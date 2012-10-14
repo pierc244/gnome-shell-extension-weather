@@ -2,6 +2,29 @@ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
 SUBDIRS = src data po
 
+zip-file: all
+if LOCAL_INSTALL
+	-rm -fR $(builddir)/_build
+	$(MKDIR_P) $(builddir)/_build; \
+	$(MAKE) install DESTDIR="$(abs_builddir)/_build"; \
+	$(GLIB_COMPILE_SCHEMAS) "$(abs_builddir)/_build/$(prefix)/share/gnome-shell/extensions/weather@gnome-shell-extensions.gnome.org/schemas"; \
+	(cd "$(abs_builddir)/_build/$(prefix)/share/gnome-shell/extensions" ; \
+	zip -qr "$(abs_builddir)/weather-indicator.shell-extension.zip" .; \
+	); \
+	rm -fR $(builddir)/_build ; \
+	echo "===================================================================" ; \
+	echo "zip-file ready for distribution:" ; \
+	echo "weather-indicator.shell-extension.zip" ; \
+	echo "==================================================================="
+else
+	@echo "*"
+	@echo "* You need to configure the package --with-local-install=yes to create a zip-file."
+	@echo "*"
+endif
+
+clean-local:
+	rm -f "$(abs_builddir)/weather-indicator.shell-extension.zip"
+
 dist-hook: dist-changelog
 
 .PHONY: dist-changelog
