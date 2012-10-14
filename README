@@ -64,7 +64,7 @@ the Shell Extension section of the Tweak Tool. Next to the check
 button for the Weather Extension should be a button that launches
 the gnome-shell-extension-prefs tool.
 
- All the configuration changes are reflected in the extension
+All the configuration changes are reflected in the extension
 immediately, there is no need to disable and enable again the
 extension.
 
