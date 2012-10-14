@@ -4,27 +4,30 @@
  *  - Displays a small weather information on the top panel.
  *  - On click, gives a popup with details about the weather.
  *
- * Copyright (C) 2011
+ * Copyright (C) 2011-2012
  *     ecyrbe <ecyrbe+spam@gmail.com>,
  *     Timur Kristof <venemo@msn.com>,
  *     Elad Alfassa <elad@fedoraproject.org>,
- *     Simon Legner <Simon.Legner@gmail.com>
- *     Mark Benjamin <weather.gnome.Markie1@dfgh.net>
+ *     Simon Legner <Simon.Legner@gmail.com>,
+ *     Mark Benjamin <weather.gnome.Markie1@dfgh.net>,
+ *     Canek Peláez <canek@ciencias.unam.mx>
  *
  * This file is part of gnome-shell-extension-weather.
  *
- * gnome-shell-extension-weather is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * gnome-shell-extension-weather is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU
+ * General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option)
+ * any later version.
  *
- * gnome-shell-extension-weather is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * gnome-shell-extension-weather is distributed in the hope that it
+ * will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with gnome-shell-extension-weather.  If not, see <http://www.gnu.org/licenses/>.
+ * along with gnome-shell-extension-weather.  If not, see
+ * <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -67,18 +70,20 @@ const WEATHER_REFRESH_INTERVAL = 'refresh-interval';
 const WeatherUnits = {
     CELSIUS: 0,
     FAHRENHEIT: 1
-}
+};
+
 const WeatherWindSpeedUnits = {
     KPH: 0,
     MPH: 1,
     MPS: 2,
     KNOTS: 3
-}
+};
+
 const WeatherPosition = {
     CENTER: 0,
     RIGHT: 1,
     LEFT: 2
-}
+};
 
 // Conversion Factors
 const WEATHER_CONV_MPH_IN_MPS = 2.23693629;
@@ -170,7 +175,8 @@ const WeatherMenuButton = new Lang.Class({
         // Panel icon
         this._weatherIcon = new St.Icon({
             icon_name: 'view-refresh-symbolic',
-            style_class: 'system-status-icon weather-icon' + (Main.panel.actor.get_text_direction() == Clutter.TextDirection.RTL ? '-rtl' : '')
+            style_class: 'system-status-icon weather-icon' +
+                (Main.panel.actor.get_text_direction() == Clutter.TextDirection.RTL ? '-rtl' : '')
         });
 
         // Label
@@ -220,7 +226,7 @@ const WeatherMenuButton = new Lang.Class({
         // Current weather
         this._currentWeather = new St.Bin({ style_class: 'current' });
         // Future weather
-        this._futureWeather = new St.Bin({ style_class: 'forecast' /*, x_align: St.Align.START*/});
+        this._futureWeather = new St.Bin({ style_class: 'forecast' });
 
         // Separator (copied from Gnome shell's popupMenu.js)
         this._separatorArea = new St.DrawingArea({ style_class: 'popup-separator-menu-item' });
@@ -248,26 +254,6 @@ const WeatherMenuButton = new Lang.Class({
 
     },
 
-    getPreferencesIcon: function() {
-        let prefIcon = new St.Icon ({
-            icon_size: 16,
-            icon_name: 'system-run'
-        });
-        let prefButton = new St.Button({
-            style_class: 'panel-button'
-        });
-        prefButton.connect('clicked', function() {
-            Util.spawn(["weather-extension-configurator"]);
-        });
-        let prefBox = new St.BoxLayout({
-            style_class: 'weather-config',
-            vertical: true
-        });
-        prefButton.add_actor(prefIcon);
-        prefBox.add_actor(prefButton);
-        return prefBox;
-    },
-
     unit_to_url: function() {
         return this._units == WeatherUnits.FAHRENHEIT ? 'f' : 'c';
     },
@@ -277,110 +263,118 @@ const WeatherMenuButton = new Lang.Class({
     },
 
     get_weather_url: function() {
-        return 'http://query.yahooapis.com/v1/public/yql?format=json&q=select link,location,wind,atmosphere,units,item.condition,item.forecast,astronomy from weather.forecast where location="' + this._woeid + '" and u="' + this.unit_to_url() + '"';
+        let query = 'select link,location,wind,atmosphere,units,'+
+            'item.condition,item.forecast,astronomy from weather.forecast '+
+            'where location="' + this._woeid + '" and u="' +
+            this.unit_to_url() + '"';
+        let server = 'http://query.yahooapis.com/v1/public/yql?format=json&q=';
+        return query + server;
     },
 
     get_weather_icon: function(code) {
-        /* see http://developer.yahoo.com/weather/#codetable */
-        /* fallback icons are: weather-clear-night weather-clear weather-few-clouds-night weather-few-clouds weather-fog weather-overcast weather-severe-alert weather-showers weather-showers-scattered weather-snow weather-storm */
+        // see http://developer.yahoo.com/weather/#codetable
+        /* fallback icons are: weather-clear-night weather-clear
+           weather-few-clouds-night weather-few-clouds weather-fog
+           weather-overcast weather-severe-alert weather-showers
+           weather-showers-scattered weather-snow weather-storm */
         let symbolic = ((this._symbolic_icons) ? '-symbolic' : '');
         switch (parseInt(code, 10)) {
-        case 0:/* tornado */
+        case 0: // tornado
             return ['weather-severe-alert' + symbolic];
-        case 1:/* tropical storm */
+        case 1: // tropical storm
             return ['weather-severe-alert' + symbolic];
-        case 2:/* hurricane */
+        case 2: // hurricane
             return ['weather-severe-alert' + symbolic];
-        case 3:/* severe thunderstorms */
+        case 3: // severe thunderstorms
             return ['weather-severe-alert' + symbolic];
-        case 4:/* thunderstorms */
+        case 4: // thunderstorms
             return ['weather-storm' + symbolic];
-        case 5:/* mixed rain and snow */
+        case 5: // mixed rain and snow
             return ['weather-snow-rain' + symbolic, 'weather-snow' + symbolic];
-        case 6:/* mixed rain and sleet */
+        case 6: // mixed rain and sleet
             return ['weather-snow-rain' + symbolic, 'weather-snow' + symbolic];
-        case 7:/* mixed snow and sleet */
+        case 7: // mixed snow and sleet
             return ['weather-snow' + symbolic];
-        case 8:/* freezing drizzle */
+        case 8: // freezing drizzle
             return ['weather-freezing-rain' + symbolic, 'weather-showers' + symbolic];
-        case 9:/* drizzle */
+        case 9: // drizzle
             return ['weather-fog' + symbolic];
-        case 10:/* freezing rain */
+        case 10: // freezing rain
             return ['weather-freezing-rain' + symbolic, 'weather-showers' + symbolic];
-        case 11:/* showers */
+        case 11: // showers
             return ['weather-showers' + symbolic];
-        case 12:/* showers */
+        case 12: // showers
             return ['weather-showers' + symbolic];
-        case 13:/* snow flurries */
+        case 13: // snow flurries
             return ['weather-snow' + symbolic];
-        case 14:/* light snow showers */
+        case 14: // light snow showers
             return ['weather-snow' + symbolic];
-        case 15:/* blowing snow */
+        case 15: // blowing snow
             return ['weather-snow' + symbolic];
-        case 16:/* snow */
+        case 16: // snow
             return ['weather-snow' + symbolic];
-        case 17:/* hail */
+        case 17: // hail
             return ['weather-snow' + symbolic];
-        case 18:/* sleet */
+        case 18: // sleet
             return ['weather-snow' + symbolic];
-        case 19:/* dust */
+        case 19: // dust
             return ['weather-fog' + symbolic];
-        case 20:/* foggy */
+        case 20: // foggy
             return ['weather-fog' + symbolic];
-        case 21:/* haze */
+        case 21: // haze
             return ['weather-fog' + symbolic];
-        case 22:/* smoky */
+        case 22: // smoky
             return ['weather-fog' + symbolic];
-        case 23:/* blustery */
+        case 23: // blustery
             return ['weather-few-clouds' + symbolic];
-        case 24:/* windy */
+        case 24: // windy
             return ['weather-few-clouds' + symbolic];
-        case 25:/* cold */
+        case 25: // cold
             return ['weather-few-clouds' + symbolic];
-        case 26:/* cloudy */
+        case 26: // cloudy
             return ['weather-overcast' + symbolic];
-        case 27:/* mostly cloudy (night) */
+        case 27: // mostly cloudy (night)
             return ['weather-clouds-night' + symbolic, 'weather-few-clouds-night' + symbolic];
-        case 28:/* mostly cloudy (day) */
+        case 28: // mostly cloudy (day)
             return ['weather-clouds' + symbolic, 'weather-overcast' + symbolic];
-        case 29:/* partly cloudy (night) */
+        case 29: // partly cloudy (night)
             return ['weather-few-clouds-night' + symbolic];
-        case 30:/* partly cloudy (day) */
+        case 30: // partly cloudy (day)
             return ['weather-few-clouds' + symbolic];
-        case 31:/* clear (night) */
+        case 31: // clear (night)
             return ['weather-clear-night' + symbolic];
-        case 32:/* sunny */
+        case 32: // sunny
             return ['weather-clear' + symbolic];
-        case 33:/* fair (night) */
+        case 33: // fair (night)
             return ['weather-clear-night' + symbolic];
-        case 34:/* fair (day) */
+        case 34: // fair (day)
             return ['weather-clear' + symbolic];
-        case 35:/* mixed rain and hail */
+        case 35: // mixed rain and hail
             return ['weather-snow-rain' + symbolic, 'weather-showers' + symbolic];
-        case 36:/* hot */
+        case 36: // hot
             return ['weather-clear' + symbolic];
-        case 37:/* isolated thunderstorms */
+        case 37: // isolated thunderstorms
             return ['weather-storm' + symbolic];
-        case 38:/* scattered thunderstorms */
+        case 38: // scattered thunderstorms
             return ['weather-storm' + symbolic];
-        case 39:/* http://developer.yahoo.com/forum/YDN-Documentation/Yahoo-Weather-API-Wrong-Condition-Code/1290534174000-1122fc3d-da6d-34a2-9fb9-d0863e6c5bc6 */
-        case 40:/* scattered showers */
+        case 39: // http://developer.yahoo.com/forum/YDN-Documentation/Yahoo-Weather-API-Wrong-Condition-Code/1290534174000-1122fc3d-da6d-34a2-9fb9-d0863e6c5bc6
+        case 40: // scattered showers
             return ['weather-showers-scattered' + symbolic, 'weather-showers' + symbolic];
-        case 41:/* heavy snow */
+        case 41: // heavy snow
             return ['weather-snow' + symbolic];
-        case 42:/* scattered snow showers */
+        case 42: // scattered snow showers
             return ['weather-snow' + symbolic];
-        case 43:/* heavy snow */
+        case 43: // heavy snow
             return ['weather-snow' + symbolic];
-        case 44:/* partly cloudy */
+        case 44: // partly cloudy
             return ['weather-few-clouds' + symbolic];
-        case 45:/* thundershowers */
+        case 45: // thundershowers
             return ['weather-storm' + symbolic];
-        case 46:/* snow showers */
+        case 46: // snow showers
             return ['weather-snow' + symbolic];
-        case 47:/* isolated thundershowers */
+        case 47: // isolated thundershowers
             return ['weather-storm' + symbolic];
-        case 3200:/* not available */
+        case 3200: // not available
         default:
             return ['weather-severe-alert' + symbolic];
         }
@@ -401,99 +395,99 @@ const WeatherMenuButton = new Lang.Class({
 
     get_weather_condition: function(code) {
         switch (parseInt(code, 10)){
-        case 0:/* tornado */
+        case 0: // tornado
             return _('Tornado');
-        case 1:/* tropical storm */
+        case 1: // tropical storm
             return _('Tropical storm');
-        case 2:/* hurricane */
+        case 2: // hurricane
             return _('Hurricane');
-        case 3:/* severe thunderstorms */
+        case 3: // severe thunderstorms
             return _('Severe thunderstorms');
-        case 4:/* thunderstorms */
+        case 4: // thunderstorms
             return _('Thunderstorms');
-        case 5:/* mixed rain and snow */
+        case 5: // mixed rain and snow
             return _('Mixed rain and snow');
-        case 6:/* mixed rain and sleet */
+        case 6: // mixed rain and sleet
             return _('Mixed rain and sleet');
-        case 7:/* mixed snow and sleet */
+        case 7: // mixed snow and sleet
             return _('Mixed snow and sleet');
-        case 8:/* freezing drizzle */
+        case 8: // freezing drizzle
             return _('Freezing drizzle');
-        case 9:/* drizzle */
+        case 9: // drizzle
             return _('Drizzle');
-        case 10:/* freezing rain */
+        case 10: // freezing rain
             return _('Freezing rain');
-        case 11:/* showers */
+        case 11: // showers
             return _('Showers');
-        case 12:/* showers */
+        case 12: // showers
             return _('Showers');
-        case 13:/* snow flurries */
+        case 13: // snow flurries
             return _('Snow flurries');
-        case 14:/* light snow showers */
+        case 14: // light snow showers
             return _('Light snow showers');
-        case 15:/* blowing snow */
+        case 15: // blowing snow
             return _('Blowing snow');
-        case 16:/* snow */
+        case 16: // snow
             return _('Snow');
-        case 17:/* hail */
+        case 17: // hail
             return _('Hail');
-        case 18:/* sleet */
+        case 18: // sleet
             return _('Sleet');
-        case 19:/* dust */
+        case 19: // dust
             return _('Dust');
-        case 20:/* foggy */
+        case 20: // foggy
             return _('Foggy');
-        case 21:/* haze */
+        case 21: // haze
             return _('Haze');
-        case 22:/* smoky */
+        case 22: // smoky
             return _('Smoky');
-        case 23:/* blustery */
+        case 23: // blustery
             return _('Blustery');
-        case 24:/* windy */
+        case 24: // windy
             return _('Windy');
-        case 25:/* cold */
+        case 25: // cold
             return _('Cold');
-        case 26:/* cloudy */
+        case 26: // cloudy
             return _('Cloudy');
-        case 27:/* mostly cloudy (night) */
-        case 28:/* mostly cloudy (day) */
+        case 27: // mostly cloudy (night)
+        case 28: // mostly cloudy (day)
             return _('Mostly cloudy');
-        case 29:/* partly cloudy (night) */
-        case 30:/* partly cloudy (day) */
+        case 29: // partly cloudy (night)
+        case 30: // partly cloudy (day)
             return _('Partly cloudy');
-        case 31:/* clear (night) */
+        case 31: // clear (night)
             return _('Clear');
-        case 32:/* sunny */
+        case 32: // sunny
             return _('Sunny');
-        case 33:/* fair (night) */
-        case 34:/* fair (day) */
+        case 33: // fair (night)
+        case 34: // fair (day)
             return _('Fair');
-        case 35:/* mixed rain and hail */
+        case 35: // mixed rain and hail
             return _('Mixed rain and hail');
-        case 36:/* hot */
+        case 36: // hot
             return _('Hot');
-        case 37:/* isolated thunderstorms */
+        case 37: // isolated thunderstorms
             return _('Isolated thunderstorms');
-        case 38:/* scattered thunderstorms */
-        case 39:/* scattered thunderstorms */
+        case 38: // scattered thunderstorms
+        case 39: // scattered thunderstorms
             return _('Scattered thunderstorms');
-        case 40:/* scattered showers */
+        case 40: // scattered showers
             return _('Scattered showers');
-        case 41:/* heavy snow */
+        case 41: // heavy snow
             return _('Heavy snow');
-        case 42:/* scattered snow showers */
+        case 42: // scattered snow showers
             return _('Scattered snow showers');
-        case 43:/* heavy snow */
+        case 43: // heavy snow
             return _('Heavy snow');
-        case 44:/* partly cloudy */
+        case 44: // partly cloudy
             return _('Partly cloudy');
-        case 45:/* thundershowers */
+        case 45: // thundershowers
             return _('Thundershowers');
-        case 46:/* snow showers */
+        case 46: // snow showers
             return _('Snow showers');
-        case 47:/* isolated thundershowers */
+        case 47: // isolated thundershowers
             return _('Isolated thundershowers');
-        case 3200:/* not available */
+        case 3200: // not available
         default:
             return _('Not available');
         }
@@ -537,29 +531,6 @@ const WeatherMenuButton = new Lang.Class({
                 let weather = json.get_object_member('query').get_object_member('results').get_object_member('channel');
                 let weather_c = weather.get_object_member('item').get_object_member('condition');
                 let forecast = weather.get_object_member('item').get_array_member('forecast').get_elements();
-
-                /* TODO won't work with the new URL
-                // Fixes wrong woeid if necessary
-                try {
-                    // Wrong woeid specified
-                    if (weather.has_member('code') && weather.get_int_member('code') == 500) {
-                        // Fetch correct woeid
-                        this.load_json_async(this.get_weather_url().replace('p=', 'w='), function(weather) {
-                            try {
-                                // Take correct woeid, update gsettings
-                                this._woeid = weather.get_object_member('location').get_string_member('location_id');
-                                this._settings.set_string(WEATHER_WOEID_KEY, this._woeid);
-                                // Load weather with correct woeid
-                                this.refreshWeather(false);
-                            } catch(e) {
-                            }
-                        });
-                        return;
-                    }
-                } catch(e) {
-                    global.log('A ' + e.name + ' has occured: ' + e.message);
-                }
-                */
 
                 let location = weather.get_object_member('location').get_string_member('city');
                 if (this._city != null && this._city.length > 0)
@@ -630,8 +601,9 @@ const WeatherMenuButton = new Lang.Class({
                         break;
                     }
                     this._currentWeatherWind.text = (wind_direction && wind > 0 ? wind_direction + ' ' : '') + wind + ' ' + wind_unit;
-                } else
+                } else {
                     this._currentWeatherWind.text = '\u2013';
+                }
 
                 this._currentWeatherLocation.label = location + '...';
                 // make the location act like a button
@@ -805,9 +777,6 @@ const WeatherMenuButton = new Lang.Class({
         let xb = new St.BoxLayout();
         xb.add_actor(bb);
         xb.add_actor(rb);
-	/* We now configure the extension using the
-	   gnome-shell-extension-prefs tool. */
-        //xb.add_actor(this.getPreferencesIcon());
 
         let box = new St.BoxLayout({
             style_class: 'weather-current-iconbox'
