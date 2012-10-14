@@ -28,6 +28,7 @@ AC_ARG_WITH([local-install],
 	     [use_local_install=no])
 
 AC_SUBST(use_local_install)
+AM_CONDITIONAL(LOCAL_INSTALL, test "x${use_local_install}" == "xyes")
 
 extensiontopdir=${datadir}/gnome-shell/extensions/weather@gnome-shell-extensions.gnome.org
 
