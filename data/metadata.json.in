@@ -3,6 +3,5 @@
     "name": "Weather indicator",
     "description": "Adds weather information menu",
     "shell-version": [ "3.6" ],
-    "localedir": "@LOCALEDIR@",
     "url": "@url@"
 }
