@@ -1,4 +1,5 @@
 data/org.gnome.shell.extensions.weather.gschema.xml.in
 data/prefs.xml
+data/search.xml
 src/extension.js
 src/prefs.js.in
