@@ -37,8 +37,8 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
 
-const WEATHER_PREFS_UI = '@TOPEXTENSIONDIR@/weather@gnome-shell-extensions.gnome.org/prefs.xml';
-const SEARCH_WOEID_UI = '@TOPEXTENSIONDIR@/weather@gnome-shell-extensions.gnome.org/search.xml';
+const WEATHER_PREFS_UI = Me.dir.get_path() + '/prefs.xml';
+const SEARCH_WOEID_UI = Me.dir.get_path() + '/search.xml';
 const WEATHER_SETTINGS_SCHEMA = 'org.gnome.shell.extensions.weather';
 
 // Placeholder string, so our combobox is never empty.
@@ -156,7 +156,7 @@ const Widget = new GObject.Class({
         try {
             builder.add_from_file(WEATHER_PREFS_UI);
         } catch (e) {
-            this.add(getErrorLabel(_('Could not load glade "' + WEATHER_PREFS_UI + '" not found.')));
+            this.add(getErrorLabel(_('UI file "' + WEATHER_PREFS_UI + '" not found.')));
             return;
         }
         this._topBox = builder.get_object('weather_top_box');
@@ -238,6 +238,7 @@ const Widget = new GObject.Class({
                 i++;
             }
             this._searching_spinner.stop();
+            this._search_entry.grab_focus();
             if (i > 0) {
                 this._locations_combobox.set_sensitive(true);
                 // Set the first one by default
@@ -253,10 +254,10 @@ const Widget = new GObject.Class({
                 this._locations_combobox.set_active(0);
                 this._locations_combobox.set_sensitive(false);
                 this._search_entry.set_text('');
-                this._search_entry.grab_focus();
                 this._search_button.set_sensitive(false);
                 this._ok_button.set_sensitive(false);
             }
+            this._search_entry.select_region(0, -1);
         });
     },
 
@@ -295,6 +296,7 @@ const Widget = new GObject.Class({
         this._search_button.connect('clicked', Lang.bind(this, function() {
             this._doSearch(this._search_entry.get_text());
         }));
+        this._search_entry.grab_focus();
     },
 
     _noSearchUI: function() {
