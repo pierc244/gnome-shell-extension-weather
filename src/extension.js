@@ -578,8 +578,7 @@ const WeatherMenuButton = new Lang.Class({
                 else
                     this._weatherInfo.text = (temperature + ' ' + this.unit_to_unicode());
 
-                this._currentWeatherSummary.text = comment;
-                this._currentWeatherTemperature.text = temperature + ' ' + this.unit_to_unicode();
+                this._currentWeatherSummary.text = comment + ', ' + temperature + ' ' + this.unit_to_unicode();
                 this._currentWeatherChill.text = chill + ' ' + this.unit_to_unicode();
                 this._currentWeatherHumidity.text = humidity;
                 this._currentWeatherPressure.text = pressure + ' ' + pressure_unit + ((pressure_state) ? ' ' : '') + this.get_pressure_state(pressure_state);
@@ -635,8 +634,8 @@ const WeatherMenuButton = new Lang.Class({
                         this._sunrise_actor = this.createSunriseSunsetLabels();
                         this._sunrise_box.add_actor(this._sunrise_actor);
                     }
-                    this._currentWeatherSunrise.text = sunrise;
-                    this._currentWeatherSunset.text = sunset;
+                    this._currentWeatherSunrise.text = sunrise.toUpperCase();
+                    this._currentWeatherSunset.text = sunset.toUpperCase();
                 } else {
                     if (this._sunrise_actor != null) {
                         this._sunrise_actor.destroy();
@@ -765,7 +764,6 @@ const WeatherMenuButton = new Lang.Class({
            the user wants to. */
         this._sunrise_box = bb;
         // Other labels
-        this._currentWeatherTemperature = new St.Label({ text: '...' });
         this._currentWeatherChill = new St.Label({ text: '...' });
         this._currentWeatherHumidity = new St.Label({ text:  '...' });
         this._currentWeatherPressure = new St.Label({ text: '...' });
@@ -785,8 +783,6 @@ const WeatherMenuButton = new Lang.Class({
         rb.add_actor(rb_captions);
         rb.add_actor(rb_values);
 
-        rb_captions.add_actor(new St.Label({text: _('Temperature:')}));
-        rb_values.add_actor(this._currentWeatherTemperature);
         rb_captions.add_actor(new St.Label({text: _('Wind chill:')}));
         rb_values.add_actor(this._currentWeatherChill);
         rb_captions.add_actor(new St.Label({text: _('Humidity:')}));
