@@ -87,6 +87,12 @@ const WeatherPosition = {
     LEFT: 2
 };
 
+const PressureTendency = {
+    STEADY: 0,
+    RISING: 1,
+    FALLING: 2
+};
+
 // Conversion Factors
 const WEATHER_CONV_MPH_IN_MPS = 2.23693629;
 const WEATHER_CONV_KPH_IN_MPS = 3.6;
@@ -517,15 +523,15 @@ const WeatherMenuButton = new Lang.Class({
 
     get_pressure_state : function(state) {
 		switch(parseInt(state, 3)) {
-			case 0:
+			case PressureTendency.STEADY:
 			return '\u2933';
 			break;
 
-			case 1:
+			case  PressureTendency.RISING:
 			return '\u2934';
 			break;
 
-			case 2:
+			case  PressureTendency.FALLING:
 			return '\u2935';
 			break;
 		}
