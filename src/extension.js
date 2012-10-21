@@ -10,7 +10,9 @@
  *     Elad Alfassa <elad@fedoraproject.org>,
  *     Simon Legner <Simon.Legner@gmail.com>,
  *     Mark Benjamin <weather.gnome.Markie1@dfgh.net>,
- *     Canek Peláez <canek@ciencias.unam.mx>
+ *     Canek Peláez <canek@ciencias.unam.mx>,
+ *     Christian Metzler <neroth@xeked.com>,
+ *     Mattia Meneguzzo <odysseus@fedoraproject.org>
  *
  * This file is part of gnome-shell-extension-weather.
  *
@@ -513,6 +515,22 @@ const WeatherMenuButton = new Lang.Class({
         return directions[Math.round(deg / 45) % directions.length];
     },
 
+    get_pressure_state : function(state) {
+		switch(parseInt(state, 3)) {
+			case 0:
+			return '\u2933';
+			break;
+
+			case 1:
+			return '\u2934';
+			break;
+
+			case 2:
+			return '\u2935';
+			break;
+		}
+	},
+
     load_json_async: function(url, fun) {
         let here = this;
 
@@ -542,8 +560,10 @@ const WeatherMenuButton = new Lang.Class({
                     comment = this.get_weather_condition(weather_c.get_string_member('code'));
 
                 let temperature = weather_c.get_string_member('temp');
+                let chill =  weather.get_object_member('wind').get_string_member('chill');
                 let humidity = weather.get_object_member('atmosphere').get_string_member('humidity') + ' %';
                 let pressure = weather.get_object_member('atmosphere').get_string_member('pressure');
+                let pressure_state = weather.get_object_member('atmosphere').get_string_member('rising');
                 let pressure_unit = weather.get_object_member('units').get_string_member('pressure');
                 let wind_direction = this.get_compass_direction(weather.get_object_member('wind').get_string_member('direction'));
                 let wind = weather.get_object_member('wind').get_string_member('speed');
@@ -554,14 +574,15 @@ const WeatherMenuButton = new Lang.Class({
                 this._currentWeatherIcon.icon_name = this._weatherIcon.icon_name = iconname;
 
                 if (this._comment_in_panel)
-                    this._weatherInfo.text = (comment + ' ' + temperature + ' ' + this.unit_to_unicode());
+                    this._weatherInfo.text = (comment + ', ' + temperature + ' ' + this.unit_to_unicode());
                 else
                     this._weatherInfo.text = (temperature + ' ' + this.unit_to_unicode());
 
                 this._currentWeatherSummary.text = comment;
                 this._currentWeatherTemperature.text = temperature + ' ' + this.unit_to_unicode();
+                this._currentWeatherChill.text = chill + ' ' + this.unit_to_unicode();
                 this._currentWeatherHumidity.text = humidity;
-                this._currentWeatherPressure.text = pressure + ' ' + pressure_unit;
+                this._currentWeatherPressure.text = pressure + ' ' + pressure_unit + ((pressure_state) ? ' ' : '') + this.get_pressure_state(pressure_state);
 
                 if (wind) {
                     // Override wind units with our preference
@@ -691,10 +712,8 @@ const WeatherMenuButton = new Lang.Class({
         let ab_spacerlabel = new St.Label({ text: '   ' });
         let ab_sunsetlabel = new St.Label({ text: _('Sunset') + ': ' });
 
-        ab.add_actor(ab_spacerlabel);
         ab.add_actor(ab_sunriselabel);
         ab.add_actor(this._currentWeatherSunrise);
-        ab_spacerlabel = new St.Label({ text: '   ' });
         ab.add_actor(ab_spacerlabel);
         ab.add_actor(ab_sunsetlabel);
         ab.add_actor(this._currentWeatherSunset);
@@ -747,6 +766,7 @@ const WeatherMenuButton = new Lang.Class({
         this._sunrise_box = bb;
         // Other labels
         this._currentWeatherTemperature = new St.Label({ text: '...' });
+        this._currentWeatherChill = new St.Label({ text: '...' });
         this._currentWeatherHumidity = new St.Label({ text:  '...' });
         this._currentWeatherPressure = new St.Label({ text: '...' });
         this._currentWeatherWind = new St.Label({ text: '...' });
@@ -767,6 +787,8 @@ const WeatherMenuButton = new Lang.Class({
 
         rb_captions.add_actor(new St.Label({text: _('Temperature:')}));
         rb_values.add_actor(this._currentWeatherTemperature);
+        rb_captions.add_actor(new St.Label({text: _('Wind chill:')}));
+        rb_values.add_actor(this._currentWeatherChill);
         rb_captions.add_actor(new St.Label({text: _('Humidity:')}));
         rb_values.add_actor(this._currentWeatherHumidity);
         rb_captions.add_actor(new St.Label({text: _('Pressure:')}));
