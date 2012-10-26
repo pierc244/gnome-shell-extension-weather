@@ -522,20 +522,22 @@ const WeatherMenuButton = new Lang.Class({
     },
 
     get_pressure_state : function(state) {
-		switch(parseInt(state, 3)) {
-			case PressureTendency.STEADY:
-			return '\u2933';
-			break;
+	switch(parseInt(state, 3)) {
+	case PressureTendency.STEADY:
+	    return '\u2933';
+	    break;
 
-			case  PressureTendency.RISING:
-			return '\u2934';
-			break;
+	case  PressureTendency.RISING:
+	    return '\u2934';
+	    break;
 
-			case  PressureTendency.FALLING:
-			return '\u2935';
-			break;
-		}
-	},
+	case  PressureTendency.FALLING:
+	    return '\u2935';
+	    break;
+	}
+        /* Should not be reached. */
+        return '\u2933';
+    },
 
     load_json_async: function(url, fun) {
         let here = this;
