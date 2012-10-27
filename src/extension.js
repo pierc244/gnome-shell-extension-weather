@@ -267,7 +267,7 @@ const WeatherMenuButton = new Lang.Class({
     },
 
     unit_to_unicode: function() {
-        return this._units == WeatherUnits.FAHRENHEIT ? '\u2109' : '\u2103';
+        return this._units == WeatherUnits.FAHRENHEIT ? '°F' : '°C';
     },
 
     get_weather_url: function() {
