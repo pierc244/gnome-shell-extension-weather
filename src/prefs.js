@@ -100,7 +100,7 @@ function windUnitFromString(s) {
         return WeatherWindSpeedUnits.MPH;
     if (s == 'm/s')
         return WeatherWindSpeedUnits.MPS;
-    return KNOTS;
+    return WeatherWindSpeedUnits.KNOTS;
 }
 
 function positionToString(pos) {
